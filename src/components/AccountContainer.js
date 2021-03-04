@@ -8,7 +8,7 @@ class AccountContainer extends Component {
     super()
     this.state = {
       transactions: [],
-      filter: 'none'
+      filterTerm: ''
     }
   }
   //Fetch from BE
@@ -26,11 +26,7 @@ class AccountContainer extends Component {
       transactions: [...this.state.transactions, newTr]
     })
   }
-
-  // state.filter update based on searchField input but overall filter functionalit does not work
-  handleFilter = (value) => {
-    this.setState({filter: value})
-  }
+  
 
 // Delete from BE
   handleDelete = (id) => {
@@ -48,20 +44,31 @@ class AccountContainer extends Component {
   }
 
   // ### Filter Not Working, instead added Delete functionality ####
-  //filteredTr = () => {
-  // if(!this.state.filter === 'none' || !this.state.filter === ''){
-  //   //const tr = this.state.transactions.map(tr => tr.name.includes(this.state.filter))
-  //   console.log('hello');
-  // }
+
+  handleFilter = (value) => {
+    this.setState({filterTerm: value})
+    //return this.state.transactions.filter(t => t.description.toLowerCase().includes(value))
+    console.log(value);
+  }
+  showTransactions = () => {
+    //console.log(value.toString());
+    let newTrans = this.state.transactions
+    if(this.state.filterTerm !== ''){
+    return newTrans.filter(t => t.description.toLowerCase().includes(this.state.filterTerm.toLowerCase()))
+    }
+    return newTrans
+    //return this.state.transactions.filter(t => console.log(t))
+    //console.log(ftr);
+  }
+ 
+  render() {
 
   
-  render() {
-     
     return (
       <div>
         <Search filter={this.handleFilter}/>
         <AddTransactionForm handleSubmit={this.handleFormSubmit}/>
-        <TransactionsList transactions={this.state.transactions} delete={this.handleDelete}/>
+        <TransactionsList hello={this.filterTr}transactions={this.showTransactions()} delete={this.handleDelete}/>
       </div>
     );
   }
